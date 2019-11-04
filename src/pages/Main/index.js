@@ -12,6 +12,7 @@ export default class Main extends Component {
     newRepo: '',
     repositories: [],
     loading: false,
+    requestError: false,
   };
 
   componentDidMount() {
@@ -41,21 +42,29 @@ export default class Main extends Component {
 
     const { newRepo, repositories } = this.state;
 
-    const response = await api.get(`/repos/${newRepo}`);
+    try {
+      const response = await api.get(`/repos/${newRepo}`);
 
-    const data = {
-      name: response.data.full_name,
-    };
+      const data = {
+        name: response.data.full_name,
+      };
 
-    this.setState({
-      repositories: [...repositories, data],
-      newRepo: '',
-      loading: false,
-    });
+      this.setState({
+        repositories: [...repositories, data],
+        newRepo: '',
+        loading: false,
+        requestError: false,
+      });
+    } catch (error) {
+      this.setState({
+        loading: false,
+        requestError: true,
+      });
+    }
   };
 
   render() {
-    const { newRepo, repositories, loading } = this.state;
+    const { newRepo, repositories, loading, requestError } = this.state;
 
     return (
       <Container>
@@ -64,7 +73,7 @@ export default class Main extends Component {
           Repositories
         </h1>
 
-        <Form onSubmit={this.handleSubmit}>
+        <Form requestError={requestError} onSubmit={this.handleSubmit}>
           <input
             type="text"
             placeholder="Add repository"
