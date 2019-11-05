@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const Loading = styled.div`
   color: #fff;
@@ -138,4 +138,13 @@ export const PaginationButtons = styled.div`
     color: #fff;
     font-weight: 600;
   }
+
+  ${props =>
+    props.page === 1 &&
+    css`
+      button:first-child {
+        cursor: not-allowed;
+        opacity: 0.6;
+      }
+    `}
 `;

@@ -99,7 +99,14 @@ export default class Repository extends Component {
   };
 
   render() {
-    const { repoName, stateIssue, repository, issues, loading } = this.state;
+    const {
+      repoName,
+      stateIssue,
+      page,
+      repository,
+      issues,
+      loading,
+    } = this.state;
 
     if (loading) {
       return <Loading>Loading...</Loading>;
@@ -145,7 +152,7 @@ export default class Repository extends Component {
           ))}
         </IssueList>
 
-        <PaginationButtons>
+        <PaginationButtons page={page}>
           <button type="button" onClick={e => this.PrevPage(e, stateIssue)}>
             Prev
           </button>
