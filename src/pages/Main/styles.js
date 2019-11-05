@@ -1,8 +1,6 @@
 import styled, { keyframes, css } from 'styled-components';
 
-export const Form = styled.form.attrs(props => ({
-  requestError: props.requestError,
-}))`
+export const Form = styled.form`
   margin-top: 30px;
   display: flex;
   flex-direction: row;
@@ -18,7 +16,7 @@ export const Form = styled.form.attrs(props => ({
           `}
 
     flex: 1;
-    padding: 10px 15px;
+    padding: 10px 10px;
     border-radius: 4px;
     font-size: 16px;
   }

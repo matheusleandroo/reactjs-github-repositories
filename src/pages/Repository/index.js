@@ -5,10 +5,19 @@ import PropTypes from 'prop-types';
 import api from '../../services/api';
 
 import Container from '../../components/Container';
-import { Loading, Owner, IssueList } from './styles';
+import {
+  Loading,
+  Owner,
+  IssueList,
+  StateButtons,
+  PaginationButtons,
+} from './styles';
 
 export default class Repository extends Component {
   state = {
+    repoName: '',
+    stateIssue: '',
+    page: 1,
     repository: {},
     issues: [],
     loading: true,
@@ -30,17 +39,70 @@ export default class Repository extends Component {
     ]);
 
     this.setState({
+      repoName,
+      stateIssue: 'open',
       repository: repository.data,
       issues: issues.data,
       loading: false,
     });
   }
 
+  GetIssues = async (e, action, page) => {
+    e.preventDefault();
+
+    const { repoName } = this.state;
+
+    const issues = await api.get(`/repos/${repoName}/issues`, {
+      params: {
+        state: action,
+        per_page: 5,
+        page,
+      },
+    });
+
+    this.setState({
+      issues: issues.data,
+      stateIssue: action,
+    });
+  };
+
+  PrevPage = async (e, stateIssue) => {
+    e.preventDefault();
+
+    const { page } = this.state;
+
+    if (page === 1) return;
+
+    const pageNumber = page - 1;
+
+    this.setState({
+      page: pageNumber,
+    });
+
+    this.GetIssues(e, stateIssue, pageNumber);
+  };
+
+  NextPage = async (e, stateIssue) => {
+    e.preventDefault();
+
+    const { page, issues } = this.state;
+
+    if (page === issues.pages) return;
+
+    const pageNumber = page + 1;
+
+    this.setState({
+      page: pageNumber,
+    });
+
+    this.GetIssues(e, stateIssue, pageNumber);
+  };
+
   render() {
-    const { repository, issues, loading } = this.state;
+    const { repoName, stateIssue, repository, issues, loading } = this.state;
 
     if (loading) {
-      return <Loading>Loading</Loading>;
+      return <Loading>Loading...</Loading>;
     }
 
     return (
@@ -50,9 +112,21 @@ export default class Repository extends Component {
             <FaArrowAltCircleLeft />
           </Link>
           <img src={repository.owner.avatar_url} alt={repository.owner.login} />
-          <h1>{repository.name}</h1>
+          <h1>{repoName}</h1>
           <p>{repository.description}</p>
         </Owner>
+
+        <StateButtons>
+          <button type="button" onClick={e => this.GetIssues(e, 'all')}>
+            All
+          </button>
+          <button type="button" onClick={e => this.GetIssues(e, 'open')}>
+            Open
+          </button>
+          <button type="button" onClick={e => this.GetIssues(e, 'closed')}>
+            Closed
+          </button>
+        </StateButtons>
 
         <IssueList>
           {issues.map(issue => (
@@ -70,6 +144,15 @@ export default class Repository extends Component {
             </li>
           ))}
         </IssueList>
+
+        <PaginationButtons>
+          <button type="button" onClick={e => this.PrevPage(e, stateIssue)}>
+            Prev
+          </button>
+          <button type="button" onClick={e => this.NextPage(e, stateIssue)}>
+            Next
+          </button>
+        </PaginationButtons>
       </Container>
     );
   }

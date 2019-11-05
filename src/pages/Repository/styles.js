@@ -101,3 +101,41 @@ export const IssueList = styled.ul`
     }
   }
 `;
+
+export const StateButtons = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 0;
+  margin-top: 10px;
+
+  button {
+    min-height: 30px;
+    margin: 0 2px;
+    padding: 0 10px;
+    border: 0;
+    border-radius: 4px;
+    background: #7159c1;
+    color: #fff;
+    font-weight: 600;
+  }
+`;
+
+export const PaginationButtons = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0;
+  margin-top: 10px;
+
+  button {
+    min-height: 30px;
+    margin: 0 2px;
+    padding: 0 10px;
+    border: 0;
+    border-radius: 4px;
+    background: #7159c1;
+    color: #fff;
+    font-weight: 600;
+  }
+`;
