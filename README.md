@@ -44,7 +44,7 @@ After clone repository, go to folder and follow this steps:
 ## Authors
 
 <ul>
-  <li>Matheus Leandro</li>
+  <li><a href="http://matheusleandro.com">Matheus Leandro</a></li>
 </ul>
 
 ## License
